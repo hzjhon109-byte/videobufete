@@ -26,15 +26,56 @@ video {
 <body>
 
 <video
-    autoplay
-    muted
+    id="videoBufete"
     loop
     playsinline
+    preload="auto"
     disablepictureinpicture
     controlslist="nodownload noplaybackrate noremoteplayback">
+
     <source src="video-bufete.mp4" type="video/mp4">
 
 </video>
+
+<script>
+const video = document.getElementById("videoBufete");
+let usuarioInteractuo = false;
+
+/* PRIMER CLIC: habilita el audio */
+document.addEventListener("click", () => {
+    usuarioInteractuo = true;
+    video.muted = false;
+}, { once: true });
+
+/* Detecta cuándo el video está visible */
+const observer = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+            if (usuarioInteractuo) {
+                video.muted = false;
+                video.play().catch(() => {});
+            } else {
+                video.muted = true;
+                video.play().catch(() => {});
+            }
+
+        } else {
+
+            video.pause();
+
+        }
+
+    });
+
+}, {
+    threshold: 0.5
+});
+
+observer.observe(video);
+</script>
 
 </body>
 </html>
